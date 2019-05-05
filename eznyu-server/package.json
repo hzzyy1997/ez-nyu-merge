@@ -1,0 +1,22 @@
+{
+  "name": "eznyu",
+  "version": "1.0.0",
+  "description": "Rate professors and course for nyu students",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Jack Zhang",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "mongodb-uri": "^0.9.7",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^7.0.0",
+    "mongoose": "^5.5.3"
+  }
+}
