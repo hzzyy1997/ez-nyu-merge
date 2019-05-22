@@ -1,12 +1,6 @@
 import React from "react";
 import Post from "./PostContainer";
-import io from 'socket.io-client';
 require('dotenv').config()
-let socket = io();
-if (process.env.ENVIRONMENT === "DEVELOPMENT") {
-    socket = io('http://localhost:4001');
-}
-console.log(socket)
 
 class ProfessorDetail extends React.Component {
   constructor(props) {
@@ -24,13 +18,13 @@ class ProfessorDetail extends React.Component {
   }
 
   componentDidMount() {
-    socket.emit("find prof", this.props.match.params.profid);
-    socket.on("find prof", data => this.setState({ 
-      name : data[0].name,
-      posts : data[0].posts,
-      courses : data[0].courses,
-      id : data[0]._id
-    }));
+    // socket.emit("find prof", this.props.match.params.profid);
+    // socket.on("find prof", data => this.setState({ 
+    //   name : data[0].name,
+    //   posts : data[0].posts,
+    //   courses : data[0].courses,
+    //   id : data[0]._id
+    // }));
   }
 
 

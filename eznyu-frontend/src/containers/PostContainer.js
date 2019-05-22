@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import ShowPost from "../components/post/ShowPosts";
 import AddPost from '../components/post/AddPost';
-import io from 'socket.io-client';
 require('dotenv').config()
-let socket = io();
-if (process.env.ENVIRONMENT === "DEVELOPMENT") {
-    socket = io('http://localhost:4001');
-}
 
 class PostContainer extends Component {
   constructor() {
@@ -23,15 +18,26 @@ class PostContainer extends Component {
   }
 
   componentDidMount() {
-    console.log(socket)
-    socket.emit("load post", this.props.id);
-    socket.on("load post", (data) => {
+    fetch('/api/post/load', {method: "GET"})
+      .then(response => {
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    }).then(response => {
       if (this._isMounted) {
-        this.setState({ posts: data })
+        console.log(response)
+        this.setState({ posts : response })
       }
     });
-    this.recieveAddPost();
-    this.recieveDeletePost();
+    // console.log(socket)
+    // socket.emit("load post", this.props.id);
+    // socket.on("load post", (data) => {
+    //   if (this._isMounted) {
+    //     this.setState({ posts: data })
+    //   }
+    // });
   }
 
   componentWillUnmount() {
@@ -40,34 +46,72 @@ class PostContainer extends Component {
 
   sendAddPost(name, message) {  
     console.log("socket send")
-    socket.emit('add post', name, message);
+    fetch('/api/post/add', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        data: post,
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Network response was not ok.');
+        }
+      })
+      .then(response => {
+        console.log(response)
+        const newPosts = Array.from(this.state.posts);
+        newPosts.push();
+        if (this.state.posts !== newPosts) {
+          this.setState({ posts: newPosts })
+        }
+      });
   }
 
-  recieveAddPost() {   
-    socket.on("add post", (data) => {
-      const newPosts = Array.from(this.state.posts)
-      newPosts.push(data);
-      if (this.state.posts !== newPosts) {
-        this.setState({ posts: newPosts })
-      }
-    });
-  }
+  // recieveAddPost() {   
+  //   socket.on("add post", (data) => {
+  //     const newPosts = Array.from(this.state.posts)
+  //     newPosts.push(data);
+  //     if (this.state.posts !== newPosts) {
+  //       this.setState({ posts: newPosts })
+  //     }
+  //   });
+  // }
 
   deletePost(id) {
     this.setState({
       deletedId: id
     }, () => { 
-      socket.emit('delete post', id);
+      fetch('/api/post/delete', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          data: id,
+        })
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network response was not ok.');
+          }
+        })
+        .then(response => {
+          console.log(response)
+          
+        });
     })
   }
 
   recieveDeletePost() {
-    socket.on("delete post", (data) => {
-      if (data === "sucess") {
-        const newPosts = this.state.posts.filter(post => post._id !== this.state.deletedId);
-        this.setState({ posts: newPosts })
-      }
-    });
+    // socket.on("delete post", (data) => {
+    //   if (data === "sucess") {
+    //     const newPosts = this.state.posts.filter(post => post._id !== this.state.deletedId);
+    //     this.setState({ posts: newPosts })
+    //   }
+    // });
   }
 
   render() {

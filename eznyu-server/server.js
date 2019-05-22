@@ -52,11 +52,27 @@ app.get('/professor/:id', function (req, res) {
 app.get('/api/professor/load', function(req, res){
   Professor.find({}, (err, data) => {
     if (err) {
-      res.send('Data could not be found');
+      res.send('Professor Data could not be found');
+      throw err;
     } else {
-      console.log("profs:", data);
+      console.log("prof data sent");
       res.send(data);
     }
+  });
+});
+
+app.post('/api/professor/add', function(req, res){
+  console.log('Professor Added: ', req.body.data)
+  const newProf = new Professor({
+    "name": req.body.data
+  });
+  newProf.save(function (err, data, count) {
+    if (err) {
+      res.send('Professor could not be added');
+      throw err;
+    }
+    console.log("Professor inserted:", data.name);
+    res.send(data.name);
   });
 });
 

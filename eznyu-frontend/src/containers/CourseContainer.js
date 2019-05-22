@@ -1,13 +1,7 @@
 import React, { Component } from "react";
 import ShowCourse from "../components/course/ShowCourse";
 import AddCourse from '../components/course/AddCourse'
-import io from 'socket.io-client';
 require('dotenv').config()
-let socket = io();
-if (process.env.ENVIRONMENT === "DEVELOPMENT") {
-    socket = io('http://localhost:4001');
-}
-console.log(socket)
 
 class CourseContainer extends Component {
   constructor() {
@@ -24,14 +18,14 @@ class CourseContainer extends Component {
   }
 
   componentDidMount() {
-    socket.emit("load course");
-    socket.on("load course", (data) => {
-      if (this._isMounted) {
-        this.setState({ courses: data })
-      }
-    });
-    this.recieveAddCourse();
-    this.recieveDeleteCourse();
+    // socket.emit("load course");
+    // socket.on("load course", (data) => {
+    //   if (this._isMounted) {
+    //     this.setState({ courses: data })
+    //   }
+    // });
+    // this.recieveAddCourse();
+    // this.recieveDeleteCourse();
   }
 
   componentWillUnmount() {
@@ -40,34 +34,34 @@ class CourseContainer extends Component {
 
   sendAddCourse(name, code, description) {
     console.log("socket send")
-    socket.emit('add course', name, code, description);
+    // socket.emit('add course', name, code, description);
   }
 
   recieveAddCourse() {
-    socket.on("add course", (data) => {
-      const newCourses = Array.from(this.state.courses)
-      newCourses.push(data);
-      if (this.state.courses !== newCourses) {
-        this.setState({ courses: newCourses })
-      }
-    });
+    // socket.on("add course", (data) => {
+    //   const newCourses = Array.from(this.state.courses)
+    //   newCourses.push(data);
+    //   if (this.state.courses !== newCourses) {
+    //     this.setState({ courses: newCourses })
+    //   }
+    // });
   }
 
   deleteCourse(id) {
     this.setState({
       deletedId: id
     }, () => { 
-      socket.emit('delete course', id);
+      //socket.emit('delete course', id);
     })
   }
 
   recieveDeleteCourse() {
-    socket.on("delete course", (data) => {
-      if (data === "sucess") {
-        const newCourses = this.state.courses.filter(course => course._id !== this.state.deletedId);
-        this.setState({ courses: newCourses })
-      }
-    });
+    // socket.on("delete course", (data) => {
+    //   if (data === "sucess") {
+    //     const newCourses = this.state.courses.filter(course => course._id !== this.state.deletedId);
+    //     this.setState({ courses: newCourses })
+    //   }
+    // });
   }
 
   render() {

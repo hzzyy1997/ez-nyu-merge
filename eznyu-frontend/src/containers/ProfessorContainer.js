@@ -37,7 +37,7 @@ class ProfessorContainer extends Component {
   }
 
   sendAddProf(name) {
-    fetch('/api/professor/addd', {
+    fetch('/api/professor/add', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
