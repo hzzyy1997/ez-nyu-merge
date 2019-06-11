@@ -18,14 +18,18 @@ class CourseContainer extends Component {
   }
 
   componentDidMount() {
-    // socket.emit("load course");
-    // socket.on("load course", (data) => {
-    //   if (this._isMounted) {
-    //     this.setState({ courses: data })
-    //   }
-    // });
-    // this.recieveAddCourse();
-    // this.recieveDeleteCourse();
+    fetch('/api/course/load', {method: "GET"})
+      .then(response => {
+        if(response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    }).then(response => {
+      if (this._isMounted) {
+        this.setState({ courses : response })
+      }
+    });
   }
 
   componentWillUnmount() {
@@ -34,34 +38,59 @@ class CourseContainer extends Component {
 
   sendAddCourse(name, code, description) {
     console.log("socket send")
-    // socket.emit('add course', name, code, description);
-  }
-
-  recieveAddCourse() {
-    // socket.on("add course", (data) => {
-    //   const newCourses = Array.from(this.state.courses)
-    //   newCourses.push(data);
-    //   if (this.state.courses !== newCourses) {
-    //     this.setState({ courses: newCourses })
-    //   }
-    // });
+    fetch('/api/course/add', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        code: code,
+        description: description
+      })
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Network Error at /api/course/add');
+        }
+      })
+      .then(response => {
+        const newCourses = Array.from(this.state.courses);
+        newCourses.push(response);
+        if (this.state.courses !== newCourses) {
+          this.setState({ courses: newCourses })
+        }
+      });
   }
 
   deleteCourse(id) {
     this.setState({
       deletedId: id
     }, () => { 
-      //socket.emit('delete course', id);
-    })
-  }
-
-  recieveDeleteCourse() {
-    // socket.on("delete course", (data) => {
-    //   if (data === "sucess") {
-    //     const newCourses = this.state.courses.filter(course => course._id !== this.state.deletedId);
-    //     this.setState({ courses: newCourses })
-    //   }
-    // });
+      fetch('/api/course/delete', {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+        })
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network Error at /api/course/delete');
+          }
+        })
+        .then(response => {
+          console.log(response);
+          if (response === "success") {
+            const newCourses = this.state.courses.filter(course => course._id !== this.state.deletedId);
+            if (this.state.courses !== newCourses) {
+              this.setState({ courses: newCourses });
+            }
+          }
+        });
+    });
   }
 
   render() {

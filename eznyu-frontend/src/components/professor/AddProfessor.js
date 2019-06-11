@@ -14,6 +14,7 @@ class AddProfessor extends Component {
   }
 
   send() {
+    this.setState({name: ""});
     this.props.sendAddProf(this.state.name);
   } 
 

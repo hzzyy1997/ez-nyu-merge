@@ -31,13 +31,6 @@ class PostContainer extends Component {
         this.setState({ posts : response })
       }
     });
-    // console.log(socket)
-    // socket.emit("load post", this.props.id);
-    // socket.on("load post", (data) => {
-    //   if (this._isMounted) {
-    //     this.setState({ posts: data })
-    //   }
-    // });
   }
 
   componentWillUnmount() {
@@ -50,7 +43,8 @@ class PostContainer extends Component {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        data: post,
+        name: name,
+        message: message
       })
     })
       .then(response => {
@@ -69,16 +63,6 @@ class PostContainer extends Component {
         }
       });
   }
-
-  // recieveAddPost() {   
-  //   socket.on("add post", (data) => {
-  //     const newPosts = Array.from(this.state.posts)
-  //     newPosts.push(data);
-  //     if (this.state.posts !== newPosts) {
-  //       this.setState({ posts: newPosts })
-  //     }
-  //   });
-  // }
 
   deletePost(id) {
     this.setState({

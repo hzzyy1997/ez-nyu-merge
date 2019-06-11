@@ -26,7 +26,6 @@ class ProfessorContainer extends Component {
         }
     }).then(response => {
       if (this._isMounted) {
-        console.log(response)
         this.setState({ professors : response })
       }
     });
@@ -48,26 +47,48 @@ class ProfessorContainer extends Component {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error('Network response was not ok.');
+          throw new Error('Network Error at /api/professor/add');
         }
       })
       .then(response => {
-        console.log(response)
         const newProfs = Array.from(this.state.professors);
-        newProfs.push();
+        newProfs.push(response);
         if (this.state.professors !== newProfs) {
           this.setState({ professors: newProfs })
         }
       });
   }
 
-  // deleteProf(id) {
-  //   this.setState({ 
-  //     deletedId : id
-  //   }, () => {    
-  //     socket.emit('delete prof', id);
-  //   })
-  // }
+  deleteProf(id) {
+    this.setState({
+      deletedId: id
+    }, () => {
+      fetch('/api/professor/delete', {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+        })
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Network Error at /api/professor/delete');
+          }
+        })
+        .then(response => {
+          console.log(response);
+          if (response === "success") {
+            const newProfs = this.state.professors.filter(prof => prof._id !== this.state.deletedId);
+            this.setState({ professors : newProfs})
+            if (this.state.professors !== newProfs) {
+              this.setState({ professors: newProfs })
+            }
+          }
+        });
+    });
+  }
 
   // recieveDeleteProf() {
   //   socket.on("delete prof", (data) => {
@@ -83,7 +104,7 @@ class ProfessorContainer extends Component {
         <div>
           <ShowProfessor 
             professors = {this.state.professors}
-            // deleteProf = {this.deleteProf.bind(this)}
+            deleteProf = {this.deleteProf.bind(this)}
           />
           <AddProfessor 
             sendAddProf = {this.sendAddProf.bind(this)}

@@ -47,16 +47,17 @@ app.get('/professor/:id', function (req, res) {
 });
 
 
-//setting api for the app
+//Setting api for the app
 
+//APIs for PROFESSORS
 app.get('/api/professor/load', function(req, res){
   Professor.find({}, (err, data) => {
     if (err) {
-      res.send('Professor Data could not be found');
+      res.json('Professor Data could not be found');
       throw err;
     } else {
       console.log("prof data sent");
-      res.send(data);
+      res.json(data);
     }
   });
 });
@@ -68,15 +69,52 @@ app.post('/api/professor/add', function(req, res){
   });
   newProf.save(function (err, data, count) {
     if (err) {
-      res.send('Professor could not be added');
+      res.json('Professor could not be added');
       throw err;
     }
     console.log("Professor inserted:", data.name);
-    res.send(data.name);
+    res.json(data);
   });
 });
 
+app.delete('/api/professor/delete', function (req, res) {
+  console.log('Professor Delete: ', req.body.id)
+  Professor.deleteOne({ _id: req.body.id }, function (err) {
+    if (err) res.json("error");
+    res.json("success");
+  });
+});
 
+// APIs for COURSES
+app.get('/api/course/load', function(req, res){
+  Course.find({}, (err, data) => {
+    if (err) {
+      res.json('Course Data could not be found');
+      throw err;
+    } else {
+      console.log("course data sent");
+      res.json(data);
+    }
+  });
+});
+
+app.post('/api/course/add', function(req, res){
+  console.log('Course Added: ', req.body)
+  const newCourse = new Course({
+    courseName: req.body.name,
+    courseId: req.body.code,
+    description: req.body.description
+  });
+  newCourse.save(function (err, course, count) {
+    if (err) {
+      res.json('Course could not be added');
+      throw err;
+    } else {
+      console.log("course added:", course);
+      res.json(course);
+    }
+  });
+});
 
 // io.on('connection', socket => {
 //     //
@@ -158,22 +196,22 @@ app.post('/api/professor/add', function(req, res){
 //       });
 //     });
 
-//     socket.on('add course', (name, code, description) => {
-//       console.log('Course Added: ', name)
-//       const newCourse = new Course({
-//         courseName: name,
-//         courseId: code,
-//         description: description
-//       });
-//       newCourse.save(function (err, course, count) {
-//         if (err) {
-//           io.emit('add course', "error")
-//           throw err;
-//         }
-//         console.log("Course inserted:", count, name);
-//         io.emit('add course', course)
-//      });
-//     });
+    // socket.on('add course', (name, code, description) => {
+    //   console.log('Course Added: ', name)
+    //   const newCourse = new Course({
+    //     courseName: name,
+    //     courseId: code,
+    //     description: description
+    //   });
+    //   newCourse.save(function (err, course, count) {
+    //     if (err) {
+    //       io.emit('add course', "error")
+    //       throw err;
+    //     }
+    //     console.log("Course inserted:", count, name);
+    //     io.emit('add course', course)
+    //  });
+    // });
 
 //     socket.on('delete course', (id) => {
 //       console.log('Course deleted: ', id)

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
-import CourseContainer from './CourseContainer';
-import ProfessorContainer from './ProfessorContainer';
-import Home from '../components/HomePage'
-import ProfessorDetail from './ProfessorDetail'
+import CourseContainer from './containers/CourseContainer';
+import ProfessorContainer from './containers/ProfessorContainer';
+import Home from './components/HomePage'
+import ProfessorDetail from './containers/ProfessorDetail'
 
 class App extends Component {
   render() {
