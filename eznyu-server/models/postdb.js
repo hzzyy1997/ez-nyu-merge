@@ -5,9 +5,10 @@ const ProfessorSchema = require('./professordb')
 
 const PostSchema = new Schema(
   {
-    professor : Schema.Types.ObjectId,
-    message    : String,
-    name      : String
+    professorId : Schema.Types.ObjectId,
+    courseId    : Schema.Types.ObjectId,
+    description : String,
+    name        : String
   },
   { timestamps: true }
 );

@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.4",
+    "express-graphql": "^0.8.0",
+    "graphql": "^14.4.2",
     "http-proxy-middleware": "^0.19.1",
     "mongodb-uri": "^0.9.7",
     "socket.io": "^2.2.0"

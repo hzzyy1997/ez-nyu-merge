@@ -17,18 +17,18 @@ class ProfessorContainer extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/professor/load', {method: "GET"})
+    fetch('/api/professor/load', { method: "GET" })
       .then(response => {
-        if(response.ok) {
-            return response.json();
+        if (response.ok) {
+          return response.json();
         } else {
-            throw new Error('Network response was not ok.');
+          throw new Error('Network response was not ok.');
         }
-    }).then(response => {
-      if (this._isMounted) {
-        this.setState({ professors : response })
-      }
-    });
+      }).then(response => {
+        if (this._isMounted) {
+          this.setState({ professors: response })
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -81,7 +81,7 @@ class ProfessorContainer extends Component {
           console.log(response);
           if (response === "success") {
             const newProfs = this.state.professors.filter(prof => prof._id !== this.state.deletedId);
-            this.setState({ professors : newProfs})
+            this.setState({ professors: newProfs })
             if (this.state.professors !== newProfs) {
               this.setState({ professors: newProfs })
             }
@@ -90,26 +90,17 @@ class ProfessorContainer extends Component {
     });
   }
 
-  // recieveDeleteProf() {
-  //   socket.on("delete prof", (data) => {
-  //     if (data === "sucess") {
-  //       const newProfs = this.state.professors.filter(prof => prof._id !== this.state.deletedId);
-  //       this.setState({ professors : newProfs})
-  //     }
-  //   });
-  // }
-
   render() {
     return (
-        <div>
-          <ShowProfessor 
-            professors = {this.state.professors}
-            deleteProf = {this.deleteProf.bind(this)}
-          />
-          <AddProfessor 
-            sendAddProf = {this.sendAddProf.bind(this)}
-          />
-        </div>
+      <div>
+        <AddProfessor
+          sendAddProf={this.sendAddProf.bind(this)}
+        />
+        <ShowProfessor
+          professors={this.state.professors}
+          deleteProf={this.deleteProf.bind(this)}
+        />
+      </div>
     )
   }
 }

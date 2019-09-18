@@ -30,6 +30,11 @@ class AddCourse extends Component {
 
   send() {
     this.props.sendAddCourse(this.state.name, this.state.code, this.state.description);
+    this.setState({
+      name : "",
+      code : "",
+      description : ""
+    });
   }
 
   render() {

@@ -38,13 +38,13 @@ class PostContainer extends Component {
   }
 
   sendAddPost(name, message) {  
-    console.log("socket send")
     fetch('/api/post/add', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         name: name,
-        message: message
+        message: message,
+        
       })
     })
       .then(response => {

@@ -18,18 +18,18 @@ class CourseContainer extends Component {
   }
 
   componentDidMount() {
-    fetch('/api/course/load', {method: "GET"})
+    fetch('/api/course/load', { method: "GET" })
       .then(response => {
-        if(response.ok) {
-            return response.json();
+        if (response.ok) {
+          return response.json();
         } else {
-            throw new Error('Network response was not ok.');
+          throw new Error('Network response was not ok.');
         }
-    }).then(response => {
-      if (this._isMounted) {
-        this.setState({ courses : response })
-      }
-    });
+      }).then(response => {
+        if (this._isMounted) {
+          this.setState({ courses: response })
+        }
+      });
   }
 
   componentWillUnmount() {
@@ -37,7 +37,6 @@ class CourseContainer extends Component {
   }
 
   sendAddCourse(name, code, description) {
-    console.log("socket send")
     fetch('/api/course/add', {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -66,7 +65,7 @@ class CourseContainer extends Component {
   deleteCourse(id) {
     this.setState({
       deletedId: id
-    }, () => { 
+    }, () => {
       fetch('/api/course/delete', {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
@@ -96,12 +95,12 @@ class CourseContainer extends Component {
   render() {
     return (
       <div>
+        <AddCourse
+          sendAddCourse={this.sendAddCourse.bind(this)}
+        />
         <ShowCourse
           courses={this.state.courses}
           deleteCourse={this.deleteCourse.bind(this)}
-        />
-        <AddCourse
-          sendAddCourse={this.sendAddCourse.bind(this)}
         />
       </div>
     )

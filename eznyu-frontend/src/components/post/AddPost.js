@@ -23,6 +23,7 @@ class AddPost extends Component {
 
   send() {
     this.props.sendAddPost(this.state.name, this.state.message);
+    this.setState({ name : ""});
   }
 
   render() {

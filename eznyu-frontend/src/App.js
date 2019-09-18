@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import CourseContainer from './containers/CourseContainer';
 import ProfessorContainer from './containers/ProfessorContainer';
 import Home from './components/HomePage'
-import ProfessorDetail from './containers/ProfessorDetail'
+import ProfessorPost from './containers/ProfessorPostContainer'
 
 class App extends Component {
   render() {
@@ -23,7 +23,8 @@ class App extends Component {
         <Route exact path='/' component = {Home} />
         <Route exact path='/professor' component = {ProfessorContainer} />
         <Route exact path='/course' component = {CourseContainer} />
-        <Route exact path='/professor/:profid' component = {ProfessorDetail} />
+        <Route exact path='/professor/:profid' component = {ProfessorPost} />
+        {/* <Route exact path='/professor/:profid/:courseid' component = {ProfessorCoursePost} /> */}
       </Router>
     )
   }
