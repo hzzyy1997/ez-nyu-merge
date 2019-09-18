@@ -1,1 +1,0 @@
-# eznyu-server
